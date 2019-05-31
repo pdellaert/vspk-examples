@@ -2,7 +2,7 @@ import pytest
 import random
 import time
 
-from vspk import v6_0 as vsdk
+from vspk import v6 as vsdk
 
 # Object instantiate_child?
 

@@ -1,6 +1,6 @@
 import pytest
 import sys
-from vspk import v6_0 as vsdk
+from vspk import v6 as vsdk
 
 @pytest.fixture(scope="session")
 def nuage_connection():
