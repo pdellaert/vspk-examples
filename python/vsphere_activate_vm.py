@@ -65,7 +65,7 @@ import requests
 import sys
 
 from time import sleep
-from pyVim.connect import SmartConnect, Disconnect
+from pyVim.connect import SmartConnect, Disconnect, SmartConnectNoSSL
 from pyVmomi import vim, vmodl
 from vspk import v5_0 as vsdk
 
@@ -194,7 +194,7 @@ def main():
         nuage_vm_subnet = args.nuage_vm_subnet
     nuage_vm_ip = None
     if args.nuage_vm_ip:
-        nuage_vm_ip = args.nuage_vm_ip
+        nuage_vm_ip = unicode(args.nuage_vm_ip)
     nuage_vm_user = None
     if args.nuage_vm_user:
         nuage_vm_user = args.nuage_vm_user
@@ -256,7 +256,7 @@ def main():
             logging.info(
                 'Connecting to vCenter server {0:s} with username {1:s}'.format(cfg.get('VSPHERE', 'vsphere_api_host'),
                                                                                 cfg.get('VSPHERE', 'vsphere_api_user')))
-            vc = SmartConnect(host=cfg.get('VSPHERE', 'vsphere_api_host'), user=cfg.get('VSPHERE', 'vsphere_api_user'),
+            vc = SmartConnectNoSSL(host=cfg.get('VSPHERE', 'vsphere_api_host'), user=cfg.get('VSPHERE', 'vsphere_api_user'),
                               pwd=cfg.get('VSPHERE', 'vsphere_api_password'),
                               port=int(cfg.get('VSPHERE', 'vsphere_api_port')))
         except IOError:
