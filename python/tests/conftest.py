@@ -4,7 +4,7 @@ from vspk import v6 as vsdk
 
 @pytest.fixture(scope="session")
 def nuage_connection():
-    api_url = 'https://localhost:8444'
+    api_url = 'https://localhost:8443'
     username = 'csproot'
     password = 'csproot'
     enterprise = 'csp'
