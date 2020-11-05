@@ -71,7 +71,7 @@ def prepare_setup(nuage_connection):
     domain_network_role.create_child(vsdk.NURoleentry(end_point_type='ZONE', role_access_type_list=['CREATE', 'READ', 'MODIFY', 'DELETE']))
     domain_network_role.create_child(vsdk.NURoleentry(end_point_type='SUBNET', role_access_type_list=['CREATE', 'READ', 'MODIFY', 'DELETE']))
     
-    # Creating Domain network admins role
+    # Creating Domain security admins role
     domain_security_role = vsdk.NURole(name='Domain security admins')
     rbac_enterprise.create_child(domain_security_role)
     # Adding role entries, identifying the permissions this role has
@@ -92,14 +92,14 @@ def prepare_setup(nuage_connection):
     rbac_enterprise.create_children([na_domain_a, na_domain_b, sa_domain_a, sa_domain_b])
     
     # Creating permissions on specific domains, permission = Group + Role. It identifies that the group has the permissions of that role on the specific entity
-    na_domain_a.create_child(vsdk.NUPermission(associated_group_id=na_network_admins.id, associated_role_id=domain_network_role.id))
-    na_domain_a.create_child(vsdk.NUPermission(associated_group_id=na_security_admins.id, associated_role_id=domain_security_role.id))
-    na_domain_b.create_child(vsdk.NUPermission(associated_group_id=na_network_admins.id, associated_role_id=domain_network_role.id))
-    na_domain_b.create_child(vsdk.NUPermission(associated_group_id=na_security_admins.id, associated_role_id=domain_security_role.id))
-    sa_domain_a.create_child(vsdk.NUPermission(associated_group_id=sa_network_admins.id, associated_role_id=domain_network_role.id))
-    sa_domain_a.create_child(vsdk.NUPermission(associated_group_id=sa_security_admins.id, associated_role_id=domain_security_role.id))
-    sa_domain_b.create_child(vsdk.NUPermission(associated_group_id=sa_network_admins.id, associated_role_id=domain_network_role.id))
-    sa_domain_b.create_child(vsdk.NUPermission(associated_group_id=sa_security_admins.id, associated_role_id=domain_security_role.id))
+    na_domain_a.create_child(vsdk.NUPermission(permitted_action=None, associated_group_id=na_network_admins.id, associated_role_id=domain_network_role.id))
+    na_domain_a.create_child(vsdk.NUPermission(permitted_action=None, associated_group_id=na_security_admins.id, associated_role_id=domain_security_role.id))
+    na_domain_b.create_child(vsdk.NUPermission(permitted_action=None, associated_group_id=na_network_admins.id, associated_role_id=domain_network_role.id))
+    na_domain_b.create_child(vsdk.NUPermission(permitted_action=None, associated_group_id=na_security_admins.id, associated_role_id=domain_security_role.id))
+    sa_domain_a.create_child(vsdk.NUPermission(permitted_action=None, associated_group_id=sa_network_admins.id, associated_role_id=domain_network_role.id))
+    sa_domain_a.create_child(vsdk.NUPermission(permitted_action=None, associated_group_id=sa_security_admins.id, associated_role_id=domain_security_role.id))
+    sa_domain_b.create_child(vsdk.NUPermission(permitted_action=None, associated_group_id=sa_network_admins.id, associated_role_id=domain_network_role.id))
+    sa_domain_b.create_child(vsdk.NUPermission(permitted_action=None, associated_group_id=sa_security_admins.id, associated_role_id=domain_security_role.id))
 
     return rbac_enterprise
 

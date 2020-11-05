@@ -105,6 +105,17 @@ def test_sync_object_delete(nuage_connection):
     count = nuage_connection.user.enterprises.get_count(filter="name == '{0}'".format(name))
     assert count == 0
 
+def test_sync_object_delete_response_choice_false(nuage_connection):
+    # Object delete with response_choice=0
+    name = random.randint(100000,999999)
+    ent = vsdk.NUEnterprise(name=name)
+    nuage_connection.user.create_child(ent)
+    obj, conn = ent.delete(response_choice=0)
+    count = nuage_connection.user.enterprises.get_count(filter="name == '{0}'".format(name))
+    ent.delete()
+    assert conn.response.status_code == 300
+    assert count == 1
+
 transaction_status = {}
 def two_args_cb(obj, conn):
     transaction_status[conn.transaction_id] = {
@@ -141,7 +152,6 @@ def wait_for_fetcher_transaction(trans_id, timeout=5):
     parent = transaction_status[trans_id]['parent']
     result = transaction_status[trans_id]['result']
     return fetcher, parent, result
-
 
 def test_async_object_create_child(nuage_connection, async_arg):
     # Object create_child
@@ -254,3 +264,15 @@ def test_async_object_delete(nuage_connection, async_arg):
     assert type(trans_id) is str
     assert count == 0
 
+def test_async_object_delete_response_choice_false(nuage_connection, async_arg):
+    # Object delete with response_choice=0
+    name = random.randint(100000,999999)
+    ent = vsdk.NUEnterprise(name=name)
+    nuage_connection.user.create_child(ent)
+    trans_id = ent.delete(response_choice=0, callback=two_args_cb, **async_arg)
+    obj, conn = wait_for_transaction(trans_id)
+    count = nuage_connection.user.enterprises.get_count(filter="name == '{0}'".format(name))
+    ent.delete()
+    assert conn.response.status_code == 300
+    assert type(trans_id) is str
+    assert count == 1

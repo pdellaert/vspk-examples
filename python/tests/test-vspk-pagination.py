@@ -29,6 +29,34 @@ def rand_mac():
         random.randint(0, 255)
         )
 
+def test_pagination_with_metadata(printer, nuage_connection):
+    name = random.randint(100000,999999)
+    ent = vsdk.NUEnterprise(name=name)
+    nuage_connection.user.create_child(ent)
+    count = 0
+    for prefix in range(0, prefix_count):
+        md_list = list()
+        for num in range(0, count_per_prefix):
+            md_list.append(
+                    vsdk.NUMetadata(name="{0:d}_{1:d}".format(prefix, num), blob="{0:d}_{1:d}".format(prefix, num))
+                )
+            ent.create_children(md_list)
+        count += count_per_prefix
+    md_list = None
+    printer("Created {0:d} Metadata objects".format(count))
+    printer("Testing Metadata objects:")
+    for page_size in page_sizes:
+        start=timer()
+        mds = fetch_items(fetcher=ent.metadatas, page_size=page_size)
+        end=timer()
+        if page_size < 1000:
+            printer("\tpage-size: {0:d} \t\t {1:f}".format(page_size, (end-start)))
+        else: 
+            printer("\tpage-size: {0:d} \t {1:f}".format(page_size, (end-start)))
+    for md_list in [mds[x:x+150] for x in range(0, len(mds), 150)]:
+        nuage_connection.user.bulk_delete(md_list)
+    ent.delete()
+
 def test_pagination_with_containers_vports(printer, nuage_connection):
     ent = vsdk.NUEnterprise(name=random.randint(100000,999999))
     nuage_connection.user.create_child(ent)

@@ -151,6 +151,23 @@ def test_sync_bulk_object_delete(nuage_connection, async_arg):
     assert connection.response.status_code < 400
     assert not errors
 
+# Currently broken >> VSD-49291
+#def test_sync_bulk_object_delete_response_choice_false(nuage_connection, async_arg):
+#    # Object delete with response_choice=0
+#    name = random.randint(100000,999999)
+#    ent = vsdk.NUEnterprise(name=name)
+#    nuage_connection.user.create_child(ent)
+#    md_list = build_md_list(count=175)
+#    result, connection, metadata, errors = ent.create_children(md_list)
+#    result, connection, metadata, errors = nuage_connection.user.bulk_delete(md_list, response_choice=0)
+#    ent.delete(callback=two_args_cb, **async_arg)
+#    assert metadata['total'] == 175
+#    assert metadata['success'] == 175
+#    assert metadata['failure'] == 0
+#    assert len(result) == 175
+#    assert connection.response.status_code = 300
+#    assert not errors
+
 def test_async_bulk_object_single_create_children(nuage_connection, async_arg):
     # Object create_child
     name = random.randint(100000,999999)
@@ -254,6 +271,24 @@ def test_async_bulk_object_delete(nuage_connection, async_arg):
     assert len(result) == 175
     assert connection.response.status_code < 400
     assert not errors
+
+# Currently broken >> VSD-49291
+#def test_async_bulk_object_delete_response_choice_false(nuage_connection, async_arg):
+#    # Object delete with response_choice=0
+#    name = random.randint(100000,999999)
+#    ent = vsdk.NUEnterprise(name=name)
+#    nuage_connection.user.create_child(ent)
+#    md_list = build_md_list(count=175)
+#    result, connection, metadata, errors = ent.create_children(md_list)
+#    trans_id = nuage_connection.user.bulk_delete(md_list, response_choice=0, callback=bulk_async_cb, **async_arg)
+#    result, connection, metadata, errors = wait_for_transaction(trans_id)
+#    ent.delete(callback=two_args_cb, **async_arg)
+#    assert metadata['total'] == 175
+#    assert metadata['success'] == 175
+#    assert metadata['failure'] == 0
+#    assert len(result) == 175
+#    assert connection.response.status_code = 300
+#    assert not errors
 
 def test_negative_bulk_object_create_children_without_list(nuage_connection, async_arg):
     name = random.randint(100000,999999)
